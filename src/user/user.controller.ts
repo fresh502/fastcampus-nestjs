@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { FindUserReqDto } from './dto/req.dto';
+import { PageReqDto } from 'src/common/dto/req.dto';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto)
@@ -10,7 +11,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll() {
+  findAll(@Query() { page, size }: PageReqDto) {
     return this.userService.findAll();
   }
 
