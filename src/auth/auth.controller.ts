@@ -1,4 +1,4 @@
-import { Controller, Request, Post, Body } from '@nestjs/common';
+import { Controller, Request, Post, Body, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiCreatedResponse, ApiExtraModels, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { SigninReqDto, SignupReqDto } from './dto/req.dto';
@@ -13,13 +13,15 @@ export class AuthController {
 
   @ApiPostResponse(SignupResDto)
   @Post('signup')
-  async signup(@Body() signupReqDto: SignupReqDto) {
-    return this.authService.signup('email', 'password');
+  async signup(@Body() { email, password, passwordConfirm }: SignupReqDto) {
+    if (password !== passwordConfirm) throw new BadRequestException();
+    const { id } = await this.authService.signup(email, password);
+    return { id };
   }
 
   @ApiPostResponse(SigninResDto)
   @Post('signin')
-  async signin(@Body() signinReqDto: SigninReqDto) {
-    return this.authService.signin({});
+  async signin(@Body() { email, password }: SigninReqDto) {
+    return this.authService.signin(email, password);
   }
 }
