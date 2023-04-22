@@ -1,8 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { FindUserReqDto } from './dto/req.dto';
 
 @ApiTags('User')
+@ApiExtraModels(FindUserReqDto)
 @Controller('api/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -13,7 +15,7 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param() { id }: FindUserReqDto) {
     return this.userService.findOne(id);
   }
 }
