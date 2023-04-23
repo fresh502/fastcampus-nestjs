@@ -32,5 +32,6 @@ async function bootstrap() {
 
   await app.listen(port);
   console.info(`listening on port ${port}`);
+  console.info(`STAGE: ${process.env.STAGE}`);
 }
 bootstrap();
