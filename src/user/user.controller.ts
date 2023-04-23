@@ -17,7 +17,6 @@ export class UserController {
   @ApiGetItemsResponse(FindUserResDto)
   @Get()
   findAll(@Query() { page, size }: PageReqDto, @User() user: UserAfterAuth) {
-    console.log(user);
     return this.userService.findAll();
   }
 
