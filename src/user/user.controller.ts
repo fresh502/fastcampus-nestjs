@@ -6,6 +6,8 @@ import { PageReqDto } from 'src/common/dto/req.dto';
 import { ApiGetItemsResponse, ApiGetResponse } from 'src/common/decorator/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
+import { Roles } from 'src/common/decorator/role.decorator';
+import { Role } from './enum/user.enum';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto, FindUserResDto)
@@ -15,6 +17,7 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindUserResDto)
+  @Roles(Role.Admin)
   @Get()
   findAll(@Query() { page, size }: PageReqDto, @User() user: UserAfterAuth) {
     return this.userService.findAll();
