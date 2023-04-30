@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { UserModule } from './user/user.module';
@@ -29,7 +29,6 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
         };
         // 주의! local 환경에서만 개발 편의성을 위해 활용
         if (configService.get('STAGE') === 'local') {
-          console.info('Sync Postgres!');
           obj = Object.assign(obj, {
             synchronize: true,
             logging: true,
@@ -43,6 +42,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     VideoModule,
     AnalyticsModule,
   ],
+  providers: [Logger],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
