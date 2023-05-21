@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
 import { RefreshToken } from './entity/refresh-token.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,8 +20,14 @@ export class AuthService {
   async signup(email: string, password: string) {
     const user = await this.userService.findOneByEmail(email);
     if (user) throw new BadRequestException();
+
     const newUser = await this.userService.create(email, password);
-    return newUser;
+
+    throw new Error('서버 에러 발생');
+    const accessToken = this.genereateAccessToken(newUser.id);
+    const refreshToken = this.genereateRefreshToken(newUser.id);
+    await this.createRefreshTokenUsingUser(newUser.id, refreshToken);
+    return { id: newUser.id, accessToken, refreshToken };
   }
 
   async signin(email: string, password: string) {
@@ -32,7 +37,7 @@ export class AuthService {
     const isMatch = password == user.password;
     if (!isMatch) throw new UnauthorizedException();
 
-    const refreshToken = await this.genereateRefreshToken(user.id);
+    const refreshToken = this.genereateRefreshToken(user.id);
     await this.createRefreshTokenUsingUser(user.id, refreshToken);
     return {
       accessToken: this.genereateAccessToken(user.id),
