@@ -26,11 +26,11 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
           username: configService.get('postgres.username'),
           password: configService.get('postgres.password'),
           autoLoadEntities: true,
+          synchronize: false,
         };
         // 주의! local 환경에서만 개발 편의성을 위해 활용
         if (configService.get('STAGE') === 'local') {
           obj = Object.assign(obj, {
-            synchronize: true,
             logging: true,
           });
         }

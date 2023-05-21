@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -17,8 +16,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  // @Column({ unique: true })
+  @Column({ unique: true })
   email: string;
 
   @Column()
