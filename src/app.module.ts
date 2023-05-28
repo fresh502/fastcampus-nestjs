@@ -9,8 +9,8 @@ import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import swaggerConfig from './config/swagger.config';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
+import sentryConfig from './config/sentry.config';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [postgresConfig, jwtConfig, swaggerConfig],
+      load: [postgresConfig, jwtConfig, swaggerConfig, sentryConfig],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
