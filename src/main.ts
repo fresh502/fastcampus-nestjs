@@ -7,6 +7,8 @@ import * as winston from 'winston';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
 import * as basicAuth from 'express-basic-auth';
+import * as Sentry from '@sentry/node';
+import { SentryInterceptor } from './common/interceptor/sentry.interceptor';
 
 async function bootstrap() {
   const port = 3000;
@@ -62,7 +64,9 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new TransformInterceptor());
+  // Sentry
+  Sentry.init({ dsn: configService.get('sentry.dsn') });
+  app.useGlobalInterceptors(new SentryInterceptor(), new TransformInterceptor());
 
   await app.listen(port);
   Logger.log(`stage: ${stage}`);

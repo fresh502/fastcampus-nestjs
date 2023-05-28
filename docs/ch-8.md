@@ -18,3 +18,10 @@ $ npm i -D @types/bcrypt
 ```bash
 $ npm i --save @nestjs/throttler
 ```
+
+## Sentry - Slack
+
+```bash
+$ npm i @sentry/node
+$ npm i @slack/webhook
+```
