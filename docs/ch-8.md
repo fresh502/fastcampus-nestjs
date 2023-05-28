@@ -12,3 +12,9 @@ $ npm i express-basic-auth
 $ npm i bcrypt
 $ npm i -D @types/bcrypt
 ```
+
+## Rate Limiting
+
+```bash
+$ npm i --save @nestjs/throttler
+```
