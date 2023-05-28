@@ -25,3 +25,14 @@ $ npm i --save @nestjs/throttler
 $ npm i @sentry/node
 $ npm i @slack/webhook
 ```
+
+## Health Check
+
+```bash
+# package 설치
+$ npm i @nestjs/terminus
+
+# 모듈, 컨트롤러 생성
+$ nest g module health
+$ nest g controller health
+```
