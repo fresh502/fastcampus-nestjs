@@ -33,10 +33,4 @@ export class UserController {
   findOne(@Param() { id }: FindUserReqDto) {
     return this.userService.findOne(id);
   }
-
-  @Public()
-  @Post('bulk')
-  createBulk() {
-    return this.userService.createBulk();
-  }
 }

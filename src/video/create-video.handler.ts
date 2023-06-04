@@ -1,4 +1,4 @@
-import { CommandHandler, EventBus, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateVideoCommand } from './command/create-video.command';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -20,7 +20,7 @@ export class CreateVideoHandler implements ICommandHandler<CreateVideoCommand> {
     let error;
     try {
       const user = await queryRunner.manager.findOneBy(User, { id: userId });
-      const video = await queryRunner.manager.save(queryRunner.manager.create(Video, { title, mimetype: 'mp4', user }));
+      const video = await queryRunner.manager.save(queryRunner.manager.create(Video, { title, mimetype, user }));
       await this.uploadVideo(video.id, extension, buffer);
       await queryRunner.commitTransaction();
       this.eventBus.publish(new VideoCreatedEvent(video.id));
@@ -35,6 +35,7 @@ export class CreateVideoHandler implements ICommandHandler<CreateVideoCommand> {
   }
 
   private async uploadVideo(id: string, extension: string, buffer: Buffer) {
-    console.log('upload video');
+    const filePath = join(process.cwd(), 'video-storage', `${id}.${extension}`);
+    await writeFile(filePath, buffer);
   }
 }
