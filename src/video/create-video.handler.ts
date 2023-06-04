@@ -1,4 +1,4 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { CreateVideoCommand } from './command/create-video.command';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -6,11 +6,12 @@ import { User } from 'src/user/entity/user.entity';
 import { Video } from './entity/video.entity';
 import { join } from 'path';
 import { writeFile } from 'fs/promises';
+import { VideoCreatedEvent } from './event/video-created.event';
 
 @Injectable()
 @CommandHandler(CreateVideoCommand)
 export class CreateVideoHandler implements ICommandHandler<CreateVideoCommand> {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource, private eventBus: EventBus) {}
 
   async execute(command: CreateVideoCommand): Promise<Video> {
     const { userId, title, mimetype, extension, buffer } = command;
@@ -22,6 +23,7 @@ export class CreateVideoHandler implements ICommandHandler<CreateVideoCommand> {
       const video = await queryRunner.manager.save(queryRunner.manager.create(Video, { title, mimetype: 'mp4', user }));
       await this.uploadVideo(video.id, extension, buffer);
       await queryRunner.commitTransaction();
+      this.eventBus.publish(new VideoCreatedEvent(video.id));
       return video;
     } catch (e) {
       await queryRunner.rollbackTransaction();
