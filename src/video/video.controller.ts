@@ -8,16 +8,18 @@ import { CreateVideoResDto, FindVideoResDto } from './dto/res.dto';
 import { PageResDto } from 'src/common/dto/res.dto';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from 'src/common/guard/throttler-behind-proxy.guard';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateVideoCommand } from './command/create-video.command';
 import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
+import { FindVideosQuery } from './query/find-videos.query';
+import { title } from 'process';
 
 @ApiTags('Video')
 @ApiExtraModels(FindVideoReqDto, PageReqDto, CreateVideoResDto, FindVideoResDto, PageResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
 @Controller('api/videos')
 export class VideoController {
-  constructor(private commandBus: CommandBus, private videoService: VideoService) {}
+  constructor(private commandBus: CommandBus, private queryBus: QueryBus, private videoService: VideoService) {}
 
   @ApiBearerAuth()
   @ApiPostResponse(CreateVideoResDto)
@@ -33,8 +35,19 @@ export class VideoController {
   @ApiGetItemsResponse(FindVideoResDto)
   @SkipThrottle()
   @Get()
-  findAll(@Query() { page, size }: PageReqDto) {
-    return this.videoService.findAll();
+  async findAll(@Query() { page, size }: PageReqDto): Promise<FindVideoResDto[]> {
+    const findVideosQuery = new FindVideosQuery(page, size);
+    const videos = await this.queryBus.execute(findVideosQuery);
+    return videos.map(({ id, title, user }) => {
+      return {
+        id,
+        title,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      };
+    });
   }
 
   @ApiBearerAuth()
