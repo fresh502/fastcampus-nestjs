@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { ScheduleModule } from '@nestjs/schedule';
-import { EmailModule } from 'src/email/email.module';
 import { VideoModule } from 'src/video/video.module';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), EmailModule, VideoModule],
+  imports: [ScheduleModule.forRoot(), VideoModule, EmailModule],
   providers: [AnalyticsService],
   exports: [AnalyticsService],
 })

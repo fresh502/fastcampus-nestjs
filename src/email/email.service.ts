@@ -13,16 +13,12 @@ export class EmailService {
     await this.mailerService.sendMail({
       from: 'nestjs2023@gmail.com',
       to: 'fresh502@gmail.com',
-      subject: 'Fastcampus NestJS Project Video',
+      subject: 'Fastcampus Nestjs project video',
       html: `
-<table style="border: 1px solid black; width:60%; margin: auto; text-align: center;">
-  <tr>
-    <th>id</th>
-    <th>title</th>
-    <th>download count</th>
-    ${data}
-  </tr>
-</table>
+      <table style="border: 1px solid black; width: 60%; margin: auto; text-align: center;">
+      <tr><th>id</th><th>title</th><th>download count</th></tr>
+      ${data}
+      </table>
       `,
     });
   }
