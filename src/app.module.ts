@@ -19,7 +19,7 @@ import emailConfig from './config/email.config';
   imports: [
     ThrottlerModule.forRoot({
       ttl: 60,
-      limit: 10,
+      limit: 20,
     }),
     ConfigModule.forRoot({
       isGlobal: true,

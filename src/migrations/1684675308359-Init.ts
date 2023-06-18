@@ -4,6 +4,8 @@ export class Init1684675308359 implements MigrationInterface {
   name = 'Init1684675308359';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TYPE IF EXISTS user_role_enum`);
+    await queryRunner.query(`CREATE TYPE user_role_enum AS ENUM ('ADMIN', 'USER')`);
     await queryRunner.query(
       `CREATE TABLE "video" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "mimetype" character varying NOT NULL, "download_cnt" integer NOT NULL DEFAULT '0', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "user_id" uuid, CONSTRAINT "PK_1a2f3856250765d72e7e1636c8e" PRIMARY KEY ("id"))`,
     );
