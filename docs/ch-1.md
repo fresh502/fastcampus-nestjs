@@ -16,7 +16,7 @@
 ## 소스 코드 다운로드
 
 ```bash
-$ git clone https://github.com/fresh502/nestjs.git
+$ git clone https://github.com/fresh502/fastcampus-nestjs.git
 $ npm i
 ```
 
