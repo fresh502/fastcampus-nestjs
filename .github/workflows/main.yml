@@ -1,0 +1,23 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to prod
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DEV }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          script: |
+            cd app
+            git pull
+            npm i
+            npm run start:dev
