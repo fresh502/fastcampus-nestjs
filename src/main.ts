@@ -64,7 +64,11 @@ async function bootstrap() {
     }),
   );
 
+  console.log(configService.get('swagger.user'));
+  console.log(configService.get('swagger.password'));
   console.log(configService.get('sentry.dsn'));
+  console.log(configService.get('postgres.host'));
+  console.log(configService.get('jwt.secret'));
   // Sentry
   Sentry.init({ dsn: configService.get('sentry.dsn') });
   app.useGlobalInterceptors(new SentryInterceptor(), new TransformInterceptor());
