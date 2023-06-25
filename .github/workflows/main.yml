@@ -47,6 +47,9 @@ jobs:
             "SLACK_WEBHOOK=${{ secrets.SLACK_WEBHOOK }}"
             "EMAIL_USER=${{ secrets.EMAIL_USER }}"
             "EMAIL_PASS=${{ secrets.EMAIL_PASS }}"
+            "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+            "SWAGGER_USER=${{ secrets.SWAGGER_USER }}"
+            "SWAGGER_PASSWORD=${{ secrets.SWAGGER_PASSWORD }}"
 
   deploy:
     needs: build

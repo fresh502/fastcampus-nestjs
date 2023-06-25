@@ -64,7 +64,6 @@ async function bootstrap() {
     }),
   );
 
-  console.log(configService.get('sentry.dsn'));
   // Sentry
   Sentry.init({ dsn: configService.get('sentry.dsn') });
   app.useGlobalInterceptors(new SentryInterceptor(), new TransformInterceptor());
